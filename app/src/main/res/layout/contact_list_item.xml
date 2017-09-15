@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dip">
+
+    <!-- Favourite star icon -->
+    <ImageView
+        android:id="@+id/contact_favourite_star"
+        android:layout_width="@dimen/star_button_width"
+        android:layout_height="@dimen/star_button_height"
+        android:layout_centerVertical="true"
+        android:focusable="false"
+        android:src="@drawable/button_star_white" />
+
+    <!-- Contact details container -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="5dip"
+        android:layout_toEndOf="@id/contact_favourite_star"
+        android:clickable="false"
+        android:focusable="false"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <!-- Contact first and last name -->
+        <TextView
+            android:id="@+id/contact_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
+
+        <!-- Contact phone number -->
+        <TextView
+            android:id="@+id/contact_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- Contact phone email -->
+        <TextView
+            android:id="@+id/contact_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>

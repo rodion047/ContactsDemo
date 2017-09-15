@@ -1,0 +1,11 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Favorite star button -->
+    <dimen name="star_button_height">40dp</dimen>
+    <dimen name="star_button_width">40dp</dimen>
+
+    <!-- Contacts screen -->
+    <dimen name="contacts_filter_buttons_spacer_width">20dp</dimen>
+    <dimen name="contacts_filter_buttons_text_size">20sp</dimen>
+</resources>

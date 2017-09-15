@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    tools:context="com.test.rodion.androidcodetestrodionmourakhtanov.MainActivity">
+
+    <!-- "Favorites" and "All" buttons container -->
+    <RelativeLayout
+        android:id="@+id/contacts_filter_buttons_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+
+            android:orientation="horizontal">
+
+            <!-- "Favorites" button -->
+            <TextView
+                android:id="@+id/contacts_button_favorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/contacts_button_favorites_title"
+                android:textColor="@drawable/contact_list_filter_button_text_color_selector"
+                android:textSize="@dimen/contacts_filter_buttons_text_size" />
+
+            <!-- Spacer -->
+            <View
+                android:layout_width="@dimen/contacts_filter_buttons_spacer_width"
+                android:layout_height="1dp" />
+
+            <!-- "All" button -->
+            <TextView
+                android:id="@+id/contacts_button_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/contacts_button_all_title"
+                android:textColor="@drawable/contact_list_filter_button_text_color_selector"
+                android:textSize="@dimen/contacts_filter_buttons_text_size" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Search bar -->
+    <EditText
+        android:id="@+id/contacts_search_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contacts_filter_buttons_container"
+        android:hint="@string/contacts_search_hint"
+        android:inputType="text" />
+
+    <!-- Contacts list view -->
+    <ListView
+        android:id="@+id/contacts_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/contacts_search_edit_text"
+        android:choiceMode="singleChoice"
+        android:drawSelectorOnTop="true" />
+
+    <!-- Add new contact button -->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+</RelativeLayout>
