@@ -5,4 +5,17 @@
     <string name="contacts_button_all_title">All</string>
     <string name="contacts_search_hint">Search</string>
     <string name="contact_list_item_context_menu_item_delete_text">Delete contact</string>
+
+    <!-- Contact edit screen -->
+    <string name="contacts_edit_first_name_hint">First name</string>
+    <string name="contacts_edit_last_name_hint">Last name</string>
+    <string name="contacts_edit_birth_date_hint">Birth date</string>
+    <string name="contacts_edit_phone_number_label">Phone %1$d</string>
+    <string name="contacts_edit_email_label">Email %1$d</string>
+    <string name="contacts_edit_address_label">Address %1$d</string>
+    <string name="contacts_edit_add_phone_number_button_title">Add phone</string>
+    <string name="contacts_edit_add_email_button_title">Add email</string>
+    <string name="contacts_edit_add_address_button_title">Add address</string>
+    <string name="contacts_edit_button_ok_title">OK</string>
+    <string name="contacts_edit_button_cancel_title">Cancel</string>
 </resources>

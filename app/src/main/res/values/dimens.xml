@@ -8,4 +8,19 @@
     <!-- Contacts screen -->
     <dimen name="contacts_filter_buttons_spacer_width">20dp</dimen>
     <dimen name="contacts_filter_buttons_text_size">20sp</dimen>
+    <dimen name="contacts_search_bar_vertical_padding">10dp</dimen>
+    <dimen name="contacts_search_bar_horizontal_padding">8dp</dimen>
+
+    <!-- Contacts edit screen -->
+    <dimen name="contacts_edit_separator_line_vertical_margin">12dp</dimen>
+    <dimen name="contacts_edit_views_horizontal_spacing">10dp</dimen>
+    <dimen name="contacts_edit_font_size">18sp</dimen>
+    <dimen name="contacts_edit_views_group_spacer_height">32dp</dimen>
+    <dimen name="contacts_edit_top_buttons_font_size">18sp</dimen>
+    <dimen name="contacts_edit_padding_horizontal">8dp</dimen>
+    <dimen name="contacts_edit_top_buttons_bar_padding_vertical">8dp</dimen>
+    <dimen name="contacts_edit_button_add_field_corner_radius">3dp</dimen>
+    <dimen name="contacts_edit_button_OK_Cancel_corner_radius">3dp</dimen>
+    <dimen name="contacts_edit_top_buttons_bgnd_padding_vertical">3dp</dimen>
+    <dimen name="contacts_edit_top_buttons_bgnd_padding_horizontal">10dp</dimen>
 </resources>

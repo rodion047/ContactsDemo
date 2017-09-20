@@ -1,6 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <!-- Top buttons bar -->
+    <RelativeLayout
+        android:id="@+id/top_buttons_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:paddingBottom="@dimen/contacts_edit_top_buttons_bar_padding_vertical"
+        android:paddingEnd="@dimen/contacts_edit_padding_horizontal"
+        android:paddingStart="@dimen/contacts_edit_padding_horizontal"
+        android:paddingTop="@dimen/contacts_edit_top_buttons_bar_padding_vertical">
 
-</LinearLayout>
+        <!-- Cancel button -->
+        <TextView
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/bgnd_contact_edit_cancel_button_selector"
+            android:gravity="center"
+            android:text="@string/contacts_edit_button_cancel_title"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/contacts_edit_top_buttons_font_size" />
+
+        <!-- OK button -->
+        <TextView
+            android:id="@+id/button_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bgnd_contact_edit_ok_button_selector"
+            android:gravity="center"
+            android:text="@string/contacts_edit_button_ok_title"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/contacts_edit_top_buttons_font_size" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_buttons_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingEnd="@dimen/contacts_edit_padding_horizontal"
+            android:paddingStart="@dimen/contacts_edit_padding_horizontal">
+
+            <!-- First name -->
+            <EditText
+                android:id="@+id/first_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/contacts_edit_separator_line_vertical_margin"
+                android:background="@android:color/transparent"
+                android:hint="@string/contacts_edit_first_name_hint"
+                android:imeOptions="flagNoExtractUi"
+                android:maxLines="1"
+                android:textSize="@dimen/contacts_edit_font_size" />
+
+            <!-- Separator line -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginBottom="@dimen/contacts_edit_separator_line_vertical_margin"
+                android:layout_marginTop="@dimen/contacts_edit_separator_line_vertical_margin"
+                android:background="@color/contact_edit_separator_line" />
+
+            <!-- Last name -->
+            <EditText
+                android:id="@+id/last_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="@string/contacts_edit_last_name_hint"
+                android:imeOptions="flagNoExtractUi"
+                android:maxLines="1"
+                android:textSize="@dimen/contacts_edit_font_size" />
+
+            <!-- Separator line -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginBottom="@dimen/contacts_edit_separator_line_vertical_margin"
+                android:layout_marginTop="@dimen/contacts_edit_separator_line_vertical_margin"
+                android:background="@color/contact_edit_separator_line" />
+
+            <!-- Birth date container -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Birth date label -->
+                <TextView
+                    android:id="@+id/birth_date_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/contacts_edit_views_horizontal_spacing"
+                    android:labelFor="@+id/birth_date"
+                    android:text="@string/contacts_edit_birth_date_hint"
+                    android:textSize="@dimen/contacts_edit_font_size"
+                    android:visibility="gone" />
+
+                <!-- Birth date edit -->
+                <EditText
+                    android:id="@+id/birth_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:clickable="true"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="@string/contacts_edit_birth_date_hint"
+                    android:maxLines="1"
+                    android:textSize="@dimen/contacts_edit_font_size" />
+            </LinearLayout>
+
+            <!-- Separator line -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginBottom="@dimen/contacts_edit_separator_line_vertical_margin"
+                android:layout_marginTop="@dimen/contacts_edit_separator_line_vertical_margin"
+                android:background="@color/contact_edit_separator_line" />
+
+            <!-- Views group spacer -->
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/contacts_edit_views_group_spacer_height" />
+
+            <!-- Phones numbers container -->
+            <LinearLayout
+                android:id="@+id/phone_number_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <!-- "Add phone" button -->
+            <TextView
+                android:id="@+id/button_add_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/bgnd_contact_edit_add_field_button_selector"
+                android:text="@string/contacts_edit_add_phone_number_button_title"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/contacts_edit_font_size" />
+
+            <!-- Views group spacer -->
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/contacts_edit_views_group_spacer_height" />
+
+            <!-- Emails container -->
+            <LinearLayout
+                android:id="@+id/email_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <!-- "Add email" button -->
+            <TextView
+                android:id="@+id/button_add_email"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/bgnd_contact_edit_add_field_button_selector"
+                android:text="@string/contacts_edit_add_email_button_title"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/contacts_edit_font_size" />
+
+            <!-- Views group spacer -->
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/contacts_edit_views_group_spacer_height" />
+
+            <!-- Addresses container -->
+            <LinearLayout
+                android:id="@+id/address_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <!-- "Add address" button -->
+            <TextView
+                android:id="@+id/button_add_address"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/bgnd_contact_edit_add_field_button_selector"
+                android:text="@string/contacts_edit_add_address_button_title"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/contacts_edit_font_size" />
+
+
+        </LinearLayout>
+    </ScrollView>
+    <!-- "Edit" button -->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_edit_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:visibility="gone"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
+</RelativeLayout>

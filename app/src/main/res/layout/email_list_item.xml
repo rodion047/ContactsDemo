@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Email label -->
+        <TextView
+            android:id="@+id/email_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:labelFor="@+id/email"
+            android:paddingEnd="@dimen/contacts_edit_views_horizontal_spacing"
+            android:textSize="@dimen/contacts_edit_font_size" />
+
+        <!-- Email edit -->
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:textSize="@dimen/contacts_edit_font_size" />
+    </LinearLayout>
+
+    <!-- Separator line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="@dimen/contacts_edit_separator_line_vertical_margin"
+        android:layout_marginTop="@dimen/contacts_edit_separator_line_vertical_margin"
+        android:background="@color/contact_edit_separator_line" />
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <solid android:color="@android:color/white" />
+    <corners android:radius="@dimen/contacts_edit_button_OK_Cancel_corner_radius" />
+
+    <padding
+        android:bottom="@dimen/contacts_edit_top_buttons_bgnd_padding_vertical"
+        android:left="@dimen/contacts_edit_top_buttons_bgnd_padding_horizontal"
+        android:right="@dimen/contacts_edit_top_buttons_bgnd_padding_horizontal"
+        android:top="@dimen/contacts_edit_top_buttons_bgnd_padding_vertical" />
+
+    <stroke
+        android:width="1dip"
+        android:color="@android:color/white"/>
+
+</shape>

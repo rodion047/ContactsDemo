@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <corners android:radius="@dimen/contacts_edit_button_add_field_corner_radius" />
+
+    <padding
+        android:bottom="5dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="5dp" />
+
+    <stroke
+        android:width="2dip"
+        android:color="@color/colorPrimary" />
+
+</shape>

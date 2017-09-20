@@ -9,7 +9,7 @@ import com.test.rodion.androidcodetestrodionmourakhtanov.model.EntityFactory;
 class SugarORMEntityFactory implements EntityFactory {
 
     @Override
-    public Contact createPerson() {
+    public Contact createContact() {
         return new SugarORMContact();
     }
 }

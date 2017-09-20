@@ -38,7 +38,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ContactEditActivity"/>
+        <activity
+            android:name=".activities.ContactEditActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

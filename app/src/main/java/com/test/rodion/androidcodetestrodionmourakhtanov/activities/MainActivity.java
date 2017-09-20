@@ -20,9 +20,9 @@ import com.test.rodion.androidcodetestrodionmourakhtanov.ContactSearchFilter;
 import com.test.rodion.androidcodetestrodionmourakhtanov.R;
 import com.test.rodion.androidcodetestrodionmourakhtanov.adapters.ContactsListAdapter;
 import com.test.rodion.androidcodetestrodionmourakhtanov.adapters.ContactsListItemProvider;
-import com.test.rodion.androidcodetestrodionmourakhtanov.model.Contact;
 import com.test.rodion.androidcodetestrodionmourakhtanov.db.DataProvider;
 import com.test.rodion.androidcodetestrodionmourakhtanov.db.DataProviderFactory;
+import com.test.rodion.androidcodetestrodionmourakhtanov.model.Contact;
 import com.test.rodion.androidcodetestrodionmourakhtanov.model.EntityFactory;
 
 import java.util.Arrays;
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CREATE_CONTACT = 200;
+    private static final int REQUEST_VIEW_CONTACT = 201;
     private ContactsListAdapter adapter;
     private TextView favoritesButton;
     private TextView allButton;
@@ -42,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
 
         // Create test db
         //createTestDb();
@@ -52,20 +51,18 @@ public class MainActivity extends AppCompatActivity {
         EditText searchBar = (EditText) findViewById(R.id.contacts_search_edit_text);
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // nothing
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // nothing
             }
 
             @Override
             public void afterTextChanged(final Editable s) {
-                searchContacts(s.toString().toLowerCase());
+                searchContacts(s.toString());
             }
         });
 
@@ -104,17 +101,32 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        // Init "Add new contact" button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        contactsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                createContact();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                onContactListItemClicked(adapter.getItem(position));
             }
         });
+
+        // Init "Create contact" button
+        FloatingActionButton buttonCreateContact = (FloatingActionButton) findViewById(R.id.button_create_contact);
+        buttonCreateContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onButtonCreateContactCliced();
+            }
+        });
+    }
+
+    private void onContactListItemClicked(Object item) {
+        if (item instanceof Contact) {
+            Contact contact = (Contact) item;
+            Intent intent = new Intent(this, ContactEditActivity.class);
+            intent.putExtra(ContactEditActivity.EXTRA_CONTACT_ID, contact.getId() == null ? 0 :
+                    contact.getId());
+            intent.putExtra(ContactEditActivity.EXTRA_VIEW_MODE, ContactEditActivity.Mode.VIEW);
+            startActivityForResult(intent, REQUEST_VIEW_CONTACT);
+        }
     }
 
     private PopupMenu getContactContextPopupMenu(View anchor) {
@@ -177,9 +189,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void createContact() {
+    private void onButtonCreateContactCliced() {
         Intent intent = new Intent(this, ContactEditActivity.class);
         startActivityForResult(intent, REQUEST_CREATE_CONTACT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ((requestCode == REQUEST_CREATE_CONTACT || requestCode == REQUEST_VIEW_CONTACT)
+                && resultCode == RESULT_OK) {
+            // Refresh contact list if new contact was created an existing on was updated
+            refreshContactListView();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void createTestDb() {
@@ -190,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create contact
         EntityFactory factory = provider.getEntityFactory();
-        Contact contact = factory.createPerson();
+        Contact contact = factory.createContact();
         contact.setFirstName("John");
         contact.setLastName("Zack");
         contact.setEmails(Arrays.asList("John-1@gmail.com", "John-2@gmail.com", "John-3@gmail.com"));

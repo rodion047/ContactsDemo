@@ -9,16 +9,16 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Performs search in a Person instance.
+ * Performs search in a Contact instance.
  */
 public class ContactSearchFilter implements ContactsListAdapter.SearchFilter {
 
     /**
-     * Searches for the provided string in all person's fields.
+     * Searches for the provided string in all contact's fields.
      *
-     * @param contact       person instance to search in.
+     * @param contact      contact instance to search in.
      * @param searchString search string.
-     * @return <code>true</code> if any person's field contains the search string
+     * @return <code>true</code> if any contact's field contains the search string
      */
     @Override
     public boolean search(@Nullable Contact contact, @Nullable String searchString) {

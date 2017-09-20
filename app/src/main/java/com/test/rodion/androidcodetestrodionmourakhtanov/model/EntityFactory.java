@@ -10,5 +10,5 @@ public interface EntityFactory {
      *
      * @return new contact instance.
      */
-    Contact createPerson();
+    Contact createContact();
 }
