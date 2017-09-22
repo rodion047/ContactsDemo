@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/phone_number_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/phone_number_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -16,7 +18,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:labelFor="@+id/phone_number"
             android:paddingEnd="@dimen/contacts_edit_views_horizontal_spacing"
             android:textSize="@dimen/contacts_edit_font_size" />
 

@@ -4,7 +4,7 @@
     <!-- Global colors -->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#ffb640</color>
+    <color name="colorAccent">#ff9800</color>
 
     <!-- Contact edit screen -->
     <color name="contact_edit_separator_line">#ffaaaaaa</color>

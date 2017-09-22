@@ -1,6 +1,8 @@
 package com.test.rodion.androidcodetestrodionmourakhtanov.activities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -20,8 +22,10 @@ import com.test.rodion.androidcodetestrodionmourakhtanov.model.Contact;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Activity for editing a contact or for creating a new one. If contact id is passed in this
@@ -65,6 +69,7 @@ public class ContactEditActivity extends AppCompatActivity {
     private List<View> addressViewsList = new ArrayList<>();
     private ViewGroup addressListContainer;
     private Calendar birthDateCalendar;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +105,15 @@ public class ContactEditActivity extends AppCompatActivity {
         }
 
         initViews(contact);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (contact != null) {
+            outState.putLong(EXTRA_CONTACT_ID, contact.getId());
+        }
+        outState.putSerializable(EXTRA_VIEW_MODE, mode);
+        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -184,8 +198,6 @@ public class ContactEditActivity extends AppCompatActivity {
                 firstNameEdit.setText(contact.getFirstName());
             }
             firstNameEdit.setEnabled(!(mode == Mode.VIEW && (firstName == null || firstName.isEmpty())));
-//            firstNameEdit.setHint(mode == Mode.VIEW && (firstName == null || firstName.isEmpty()) ?
-//                    "" : getString(R.string.contacts_edit_last_name_hint));
 
             // Set last name
             EditText lastNameEdit = (EditText) findViewById(R.id.last_name);
@@ -196,8 +208,6 @@ public class ContactEditActivity extends AppCompatActivity {
                 lastNameEdit.setText(contact.getLastName());
             }
             lastNameEdit.setEnabled(!(mode == Mode.VIEW && (lastName == null || lastName.isEmpty())));
-//            lastNameEdit.setHint(mode == Mode.VIEW && (lastName == null || lastName.isEmpty()) ?
-//                    "" : getString(R.string.contacts_edit_last_name_hint));
 
             // Set birth date
             if (contact.getBirthDate() != null) {
@@ -402,8 +412,102 @@ public class ContactEditActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Returns true if changes were made to the contact.
+     *
+     * @return true if changes were made to the contact.
+     */
+    private boolean isContactEdited() {
+        if (contact == null) return false;
+
+        // Check first name
+        String firstName = ((EditText) findViewById(R.id.first_name)).getText().toString();
+        if (!firstName.equals(contact.getFirstName())) return true;
+
+        // Check last name
+        String lastName = ((EditText) findViewById(R.id.last_name)).getText().toString();
+        if (!lastName.equals(contact.getLastName())) return true;
+
+        // Check birth date
+        if (birthDateCalendar != null) {
+            Date date1 = birthDateCalendar.getTime();
+            Date date2 = contact.getBirthDate();
+            if (date1 != null && date2 != null) {
+                if (date1.compareTo(date2) != 0) return true;
+            } else if (date1 != null || date2 != null) {
+                return true;
+            }
+        }
+
+        // Check phone numbers
+        List<String> phoneList = new ArrayList<>();
+        for (View view : phoneNumberViewsList) {
+            String phoneString = ((TextView) view.findViewById(R.id.phone_number))
+                    .getText().toString().trim();
+            if (!phoneString.isEmpty()) {
+                phoneList.add(phoneString);
+            }
+        }
+        if (!listsEqual(contact.getPhoneNumbers(), phoneList)) return true;
+
+        // Check emails
+        List<String> emailList = new ArrayList<>();
+        for (View view : emailViewsList) {
+            String emailString = ((TextView) view.findViewById(R.id.email))
+                    .getText().toString().trim();
+            if (!emailString.isEmpty()) {
+                emailList.add(emailString);
+            }
+        }
+        if (!listsEqual(contact.getEmails(), emailList)) return true;
+
+        // Check addresses
+        List<String> addressList = new ArrayList<>();
+        for (View view : addressViewsList) {
+            String addressString = ((TextView) view.findViewById(R.id.address))
+                    .getText().toString().trim();
+            if (!addressString.isEmpty()) {
+                addressList.add(addressString);
+            }
+        }
+        contact.setAddresses(addressList);
+
+        return !listsEqual(contact.getAddresses(), addressList);
+    }
+
+    private boolean listsEqual(List<String> list1, List<String> list2) {
+        if (list1 == list2) return true;
+        if (list1 == null || list2 == null) return false;
+        if (list1.size() != list2.size()) return false;
+        for (int i = 0; i < list1.size(); i++) {
+            if (!Objects.equals(list1.get(i), list2.get(i))) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mode == Mode.EDIT && isContactEdited()) {
+            dialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.contacts_edit_discard_dialog_title)
+                    .setPositiveButton(R.string.contacts_edit_discard_dialog_positive_button_title,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    ContactEditActivity.super.onBackPressed();
+                                }
+                            })
+                    .setNegativeButton(R.string.contacts_edit_discard_dialog_negative_button_title,
+                            null)
+                    .create();
+            dialog.show();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void onButtonCancelClicked() {
-        finish();
+        onBackPressed();
     }
 
     /**
@@ -418,6 +522,10 @@ public class ContactEditActivity extends AppCompatActivity {
                 birthDateCalendar.set(Calendar.YEAR, year);
                 birthDateCalendar.set(Calendar.MONTH, monthOfYear);
                 birthDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                birthDateCalendar.set(Calendar.HOUR_OF_DAY, 0);
+                birthDateCalendar.set(Calendar.MINUTE, 0);
+                birthDateCalendar.set(Calendar.SECOND, 0);
+                birthDateCalendar.set(Calendar.MILLISECOND, 0);
                 setBirthDateViewText(birthDateCalendar);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
@@ -465,5 +573,13 @@ public class ContactEditActivity extends AppCompatActivity {
             addressListContainer = (ViewGroup) findViewById(R.id.address_list_container);
         }
         return addressListContainer;
+    }
+
+    @Override
+    protected void onStop() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+        super.onStop();
     }
 }

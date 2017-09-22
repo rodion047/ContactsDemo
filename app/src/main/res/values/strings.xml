@@ -18,4 +18,7 @@
     <string name="contacts_edit_add_address_button_title">Add address</string>
     <string name="contacts_edit_button_ok_title">OK</string>
     <string name="contacts_edit_button_cancel_title">Cancel</string>
+    <string name="contacts_edit_discard_dialog_title">Discard changes?</string>
+    <string name="contacts_edit_discard_dialog_positive_button_title">Yes</string>
+    <string name="contacts_edit_discard_dialog_negative_button_title">No</string>
 </resources>
