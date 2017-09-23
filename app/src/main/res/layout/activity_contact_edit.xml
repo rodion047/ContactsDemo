@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <!-- Top buttons bar -->
     <RelativeLayout
         android:id="@+id/top_buttons_bar"
@@ -192,6 +193,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/bgnd_contact_edit_add_field_button_selector"
                 android:text="@string/contacts_edit_add_address_button_title"
+                android:layout_marginBottom="@dimen/contacts_edit_separator_line_vertical_margin"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/contacts_edit_font_size" />
 

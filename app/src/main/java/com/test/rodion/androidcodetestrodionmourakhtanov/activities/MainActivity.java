@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == REQUEST_CREATE_CONTACT || requestCode == REQUEST_VIEW_CONTACT)
                 && resultCode == RESULT_OK) {
-            // Refresh contact list if new contact was created an existing on was updated
+            // Refresh contact list if new contact was created an existing one was updated
             refreshContactListView();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -206,9 +206,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void createTestDb() {
         DataProvider provider = DataProviderFactory.getProviderInstance();
-
-        // Read all
-        //List<? extends Contact> persons = provider.getContacts();
 
         // Create contact
         EntityFactory factory = provider.getEntityFactory();
@@ -218,10 +215,6 @@ public class MainActivity extends AppCompatActivity {
         contact.setEmails(Arrays.asList("John-1@gmail.com", "John-2@gmail.com", "John-3@gmail.com"));
         contact.setPhoneNumbers(Arrays.asList("+1-123-343-1122", "+7-913-555-6789"));
         provider.addContact(contact);
-
-        // Read
-        //Contact p1 = provider.getContact(3);
-        //Contact p2 = provider.getContact(13);
     }
 
     @Override

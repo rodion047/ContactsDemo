@@ -156,6 +156,7 @@ public class ContactEditActivity extends AppCompatActivity {
 
         // Init "Add phone" button
         View addPhoneNumberButton = findViewById(R.id.button_add_phone_number);
+        addPhoneNumberButton.setVisibility(contact == null || mode == Mode.EDIT ? View.VISIBLE : View.GONE);
         addPhoneNumberButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,6 +166,7 @@ public class ContactEditActivity extends AppCompatActivity {
 
         // Init "Add email" button
         View addEmailButton = findViewById(R.id.button_add_email);
+        addEmailButton.setVisibility(contact == null || mode == Mode.EDIT ? View.VISIBLE : View.GONE);
         addEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,6 +176,7 @@ public class ContactEditActivity extends AppCompatActivity {
 
         // Init "Add address" button
         View addAddressButton = findViewById(R.id.button_add_address);
+        addAddressButton.setVisibility(contact == null || mode == Mode.EDIT ? View.VISIBLE : View.GONE);
         addAddressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -265,7 +268,6 @@ public class ContactEditActivity extends AppCompatActivity {
                 // Add one empty phone number edit view
                 addPhoneNumberLayout();
             }
-            addPhoneNumberButton.setVisibility(mode == Mode.EDIT ? View.VISIBLE : View.GONE);
 
             // Set emails
             List<String> emails = contact.getEmails();
@@ -282,7 +284,6 @@ public class ContactEditActivity extends AppCompatActivity {
                 // Add one empty email edit view
                 addEmailLayout();
             }
-            addEmailButton.setVisibility(mode == Mode.EDIT ? View.VISIBLE : View.GONE);
 
             // Set addresses
             List<String> addresses = contact.getAddresses();
@@ -295,11 +296,7 @@ public class ContactEditActivity extends AppCompatActivity {
                         addressEdit.setFocusableInTouchMode(mode == Mode.EDIT);
                     }
                 }
-            } else if (mode == Mode.EDIT) {
-                // Add one empty email edit view
-                addAddressLayout();
             }
-            addAddressButton.setVisibility(mode == Mode.EDIT ? View.VISIBLE : View.GONE);
         }
 
         // IMPORTANT:
