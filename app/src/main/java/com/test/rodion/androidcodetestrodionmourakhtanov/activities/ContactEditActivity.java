@@ -54,22 +54,32 @@ public class ContactEditActivity extends AppCompatActivity {
     public static final String EXTRA_CONTACT_ID = "contactId";
     public static final String EXTRA_VIEW_MODE = "viewMode";
 
+    private static final String STATE_PHONES_VIEW_LIST_SIZE = "phonesViewListSize";
+    private static final String STATE_EMAILS_VIEW_LIST_SIZE = "emailsViewListSize";
+    private static final String STATE_ADDRESSES_VIEW_LIST_SIZE = "addressesViewListSize";
+
     private static final int MAX_NUMOF_PHONE_NUMBERS = 10;
     private static final int MAX_NUMOF_EMAILS = 10;
     private static final int MAX_NUMOF_ADDRESSES = 10;
+    private static final int PHONE_NUMBER_EDIT_START_ID = 500;
+    private static final int EMAIL_EDIT_START_ID = 600;
+    private static final int ADDRESS_EDIT_START_ID = 700;
 
     private EditText birthDateView;
     private TextView birthDateLabel;
     private Mode mode;
     private Contact contact;
-    private List<View> phoneNumberViewsList = new ArrayList<>();
+    private List<EditText> phoneNumberViewsList = new ArrayList<>();
     private ViewGroup phoneNumberListContainer;
-    private List<View> emailViewsList = new ArrayList<>();
+    private List<EditText> emailViewsList = new ArrayList<>();
     private ViewGroup emailListContainer;
-    private List<View> addressViewsList = new ArrayList<>();
+    private List<EditText> addressViewsList = new ArrayList<>();
     private ViewGroup addressListContainer;
     private Calendar birthDateCalendar;
     private AlertDialog dialog;
+    private int savedPhonesViewListSize;
+    private int savedEmailsViewListSize;
+    private int savedAddressesViewListSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +90,9 @@ public class ContactEditActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             contactId = savedInstanceState.getLong(EXTRA_CONTACT_ID, 0);
             mode = (Mode) savedInstanceState.getSerializable(EXTRA_VIEW_MODE);
+            savedPhonesViewListSize = savedInstanceState.getInt(STATE_PHONES_VIEW_LIST_SIZE, 0);
+            savedEmailsViewListSize = savedInstanceState.getInt(STATE_EMAILS_VIEW_LIST_SIZE, 0);
+            savedAddressesViewListSize = savedInstanceState.getInt(STATE_ADDRESSES_VIEW_LIST_SIZE, 0);
         } else {
             contactId = getIntent().getLongExtra(EXTRA_CONTACT_ID, 0);
             mode = (Mode) getIntent().getSerializableExtra(EXTRA_VIEW_MODE);
@@ -112,6 +125,9 @@ public class ContactEditActivity extends AppCompatActivity {
         if (contact != null) {
             outState.putLong(EXTRA_CONTACT_ID, contact.getId());
         }
+        outState.putInt(STATE_PHONES_VIEW_LIST_SIZE, phoneNumberViewsList.size());
+        outState.putInt(STATE_EMAILS_VIEW_LIST_SIZE, emailViewsList.size());
+        outState.putInt(STATE_ADDRESSES_VIEW_LIST_SIZE, addressViewsList.size());
         outState.putSerializable(EXTRA_VIEW_MODE, mode);
         super.onSaveInstanceState(outState);
     }
@@ -238,9 +254,8 @@ public class ContactEditActivity extends AppCompatActivity {
             List<String> phoneNumbers = contact.getPhoneNumbers();
             if (phoneNumbers != null && !phoneNumbers.isEmpty()) {
                 for (String phoneNumber : phoneNumbers) {
-                    View phoneNumberView = addPhoneNumberLayout();
+                    EditText phoneNumberEdit = addPhoneNumberLayout();
                     if (phoneNumber != null && !phoneNumber.isEmpty()) {
-                        EditText phoneNumberEdit = phoneNumberView.findViewById(R.id.phone_number);
                         phoneNumberEdit.setText(phoneNumber);
                         phoneNumberEdit.setFocusable(mode == Mode.EDIT);
                         phoneNumberEdit.setFocusableInTouchMode(mode == Mode.EDIT);
@@ -256,9 +271,8 @@ public class ContactEditActivity extends AppCompatActivity {
             List<String> emails = contact.getEmails();
             if (emails != null && !emails.isEmpty()) {
                 for (String email : emails) {
-                    View emailView = addEmailLayout();
+                    EditText emailEdit = addEmailLayout();
                     if (email != null && !email.isEmpty()) {
-                        EditText emailEdit = emailView.findViewById(R.id.email);
                         emailEdit.setText(email);
                         emailEdit.setFocusable(mode == Mode.EDIT);
                         emailEdit.setFocusableInTouchMode(mode == Mode.EDIT);
@@ -274,9 +288,8 @@ public class ContactEditActivity extends AppCompatActivity {
             List<String> addresses = contact.getAddresses();
             if (addresses != null && !addresses.isEmpty()) {
                 for (String address : addresses) {
-                    View addressView = addAddressLayout();
+                    EditText addressEdit = addAddressLayout();
                     if (address != null && !address.isEmpty()) {
-                        EditText addressEdit = addressView.findViewById(R.id.address);
                         addressEdit.setText(address);
                         addressEdit.setFocusable(mode == Mode.EDIT);
                         addressEdit.setFocusableInTouchMode(mode == Mode.EDIT);
@@ -287,6 +300,28 @@ public class ContactEditActivity extends AppCompatActivity {
                 addAddressLayout();
             }
             addAddressButton.setVisibility(mode == Mode.EDIT ? View.VISIBLE : View.GONE);
+        }
+
+        // IMPORTANT:
+        // If this activity is being restored, we must add back in fields that user had added
+        // (but had not saved yet) so that onRestoreInstanceState can restore those fields values.
+        int numOfFields = savedPhonesViewListSize - phoneNumberViewsList.size();
+        if (numOfFields > 0) {
+            for (int i = 0; i < numOfFields; i++) {
+                addPhoneNumberLayout();
+            }
+        }
+        numOfFields = savedEmailsViewListSize - emailViewsList.size();
+        if (numOfFields > 0) {
+            for (int i = 0; i < numOfFields; i++) {
+                addEmailLayout();
+            }
+        }
+        numOfFields = savedAddressesViewListSize - addressViewsList.size();
+        if (numOfFields > 0) {
+            for (int i = 0; i < numOfFields; i++) {
+                addAddressLayout();
+            }
         }
 
         firstNameEdit.requestFocus();
@@ -304,51 +339,73 @@ public class ContactEditActivity extends AppCompatActivity {
         addPhoneNumberLayout();
     }
 
-    private View addPhoneNumberLayout() {
+    private EditText addPhoneNumberLayout() {
         ViewGroup parent = getPhoneNumberListContainer();
-        View phoneNumberLayout = getLayoutInflater().inflate(R.layout.phone_number_list_item,
-                parent, false);
+        View phoneNumberLayout = getLayoutInflater().inflate(R.layout.phone_number_list_item, parent, false);
         parent.addView(phoneNumberLayout);
-        phoneNumberViewsList.add(phoneNumberLayout);
+
+        final EditText phoneEditView = phoneNumberLayout.findViewById(R.id.phone_number);
+        // Set UNIQUE id to the phone number EditText so that activity restore works correctly
+        phoneEditView.setId(PHONE_NUMBER_EDIT_START_ID + phoneNumberViewsList.size());
+        phoneNumberViewsList.add(phoneEditView);
+
         TextView phoneNumberLabelView = phoneNumberLayout.findViewById(R.id.phone_number_label);
         phoneNumberLabelView.setText(getString(R.string.contacts_edit_phone_number_label,
                 phoneNumberViewsList.size()));
+
+        // Hide "Add phone" button if we've reached the limit
         if (phoneNumberViewsList.size() >= MAX_NUMOF_PHONE_NUMBERS) {
             findViewById(R.id.button_add_phone_number).setVisibility(View.GONE);
         }
-        phoneNumberLayout.findViewById(R.id.phone_number).requestFocus();
 
-        return phoneNumberLayout;
+        phoneEditView.requestFocus();
+        return phoneEditView;
     }
 
-    private View addEmailLayout() {
+    private EditText addEmailLayout() {
         ViewGroup parent = getEmailListContainer();
         View emailLayout = getLayoutInflater().inflate(R.layout.email_list_item, parent, false);
         parent.addView(emailLayout);
-        emailViewsList.add(emailLayout);
+
+        final EditText emailEditView = emailLayout.findViewById(R.id.email);
+        // Set UNIQUE id to the EditText view so that activity restore works correctly
+        emailEditView.setId(EMAIL_EDIT_START_ID + emailViewsList.size());
+        emailViewsList.add(emailEditView);
+
+        // Set label text
         TextView emailLabelView = emailLayout.findViewById(R.id.email_label);
         emailLabelView.setText(getString(R.string.contacts_edit_email_label, emailViewsList.size()));
+
+        // Hide "Add email" button if we've reached the limit
         if (emailViewsList.size() >= MAX_NUMOF_EMAILS) {
             findViewById(R.id.button_add_email).setVisibility(View.GONE);
         }
-        findViewById(R.id.email).requestFocus();
 
-        return emailLayout;
+        emailEditView.requestFocus();
+        return emailEditView;
     }
 
-    private View addAddressLayout() {
+    private EditText addAddressLayout() {
         ViewGroup parent = getAddressListContainer();
         View addressLayout = getLayoutInflater().inflate(R.layout.address_list_item, parent, false);
         parent.addView(addressLayout);
-        addressViewsList.add(addressLayout);
+
+        final EditText addressEditView = addressLayout.findViewById(R.id.address);
+        // Set UNIQUE id to the EditText view so that activity restore works correctly
+        addressEditView.setId(ADDRESS_EDIT_START_ID + addressViewsList.size());
+        addressViewsList.add(addressEditView);
+
+        // Set label text
         TextView addressLabelView = addressLayout.findViewById(R.id.address_label);
         addressLabelView.setText(getString(R.string.contacts_edit_address_label, addressViewsList.size()));
+
+        // Hide "Add address" button if we've reached the limit
         if (addressViewsList.size() >= MAX_NUMOF_ADDRESSES) {
             findViewById(R.id.button_add_address).setVisibility(View.GONE);
         }
-        addressLayout.findViewById(R.id.address).requestFocus();
 
-        return addressLayout;
+        addressEditView.requestFocus();
+        return addressEditView;
     }
 
     private void onButtonOKClicked() {
@@ -373,9 +430,8 @@ public class ContactEditActivity extends AppCompatActivity {
 
         // Set phones
         List<String> phoneList = new ArrayList<>();
-        for (View view : phoneNumberViewsList) {
-            String phoneString = ((TextView) view.findViewById(R.id.phone_number))
-                    .getText().toString().trim();
+        for (EditText view : phoneNumberViewsList) {
+            String phoneString = view.getText().toString().trim();
             if (!phoneString.isEmpty()) {
                 phoneList.add(phoneString);
             }
@@ -384,9 +440,8 @@ public class ContactEditActivity extends AppCompatActivity {
 
         // Set emails
         List<String> emailList = new ArrayList<>();
-        for (View view : emailViewsList) {
-            String emailString = ((TextView) view.findViewById(R.id.email))
-                    .getText().toString().trim();
+        for (EditText view : emailViewsList) {
+            String emailString = view.getText().toString().trim();
             if (!emailString.isEmpty()) {
                 emailList.add(emailString);
             }
@@ -395,9 +450,8 @@ public class ContactEditActivity extends AppCompatActivity {
 
         // Set addresses
         List<String> addressList = new ArrayList<>();
-        for (View view : addressViewsList) {
-            String addressString = ((TextView) view.findViewById(R.id.address))
-                    .getText().toString().trim();
+        for (EditText view : addressViewsList) {
+            String addressString = view.getText().toString().trim();
             if (!addressString.isEmpty()) {
                 addressList.add(addressString);
             }
@@ -418,18 +472,25 @@ public class ContactEditActivity extends AppCompatActivity {
      * @return true if changes were made to the contact.
      */
     private boolean isContactEdited() {
-        if (contact == null) return false;
-
         // Check first name
         String firstName = ((EditText) findViewById(R.id.first_name)).getText().toString();
-        if (!firstName.equals(contact.getFirstName())) return true;
+        if (contact == null) {
+            if (!firstName.isEmpty()) return true;
+        } else {
+            if (!firstName.equals(contact.getFirstName())) return true;
+        }
 
         // Check last name
         String lastName = ((EditText) findViewById(R.id.last_name)).getText().toString();
-        if (!lastName.equals(contact.getLastName())) return true;
+        if (contact == null) {
+            if (!lastName.isEmpty()) return true;
+        } else {
+            if (!lastName.equals(contact.getLastName())) return true;
+        }
 
         // Check birth date
         if (birthDateCalendar != null) {
+            if (contact == null) return true;
             Date date1 = birthDateCalendar.getTime();
             Date date2 = contact.getBirthDate();
             if (date1 != null && date2 != null) {
@@ -441,38 +502,47 @@ public class ContactEditActivity extends AppCompatActivity {
 
         // Check phone numbers
         List<String> phoneList = new ArrayList<>();
-        for (View view : phoneNumberViewsList) {
-            String phoneString = ((TextView) view.findViewById(R.id.phone_number))
-                    .getText().toString().trim();
+        for (EditText view : phoneNumberViewsList) {
+            String phoneString = view.getText().toString().trim();
             if (!phoneString.isEmpty()) {
                 phoneList.add(phoneString);
             }
         }
-        if (!listsEqual(contact.getPhoneNumbers(), phoneList)) return true;
+        if (contact == null) {
+            if (phoneList.size() > 0) return true;
+        } else {
+            if (!listsEqual(contact.getPhoneNumbers(), phoneList)) return true;
+        }
 
         // Check emails
         List<String> emailList = new ArrayList<>();
-        for (View view : emailViewsList) {
-            String emailString = ((TextView) view.findViewById(R.id.email))
-                    .getText().toString().trim();
+        for (EditText view : emailViewsList) {
+            String emailString = view.getText().toString().trim();
             if (!emailString.isEmpty()) {
                 emailList.add(emailString);
             }
         }
-        if (!listsEqual(contact.getEmails(), emailList)) return true;
+        if (contact == null) {
+            if (emailList.size() > 0) return true;
+        } else {
+            if (!listsEqual(contact.getEmails(), emailList)) return true;
+        }
 
         // Check addresses
         List<String> addressList = new ArrayList<>();
-        for (View view : addressViewsList) {
-            String addressString = ((TextView) view.findViewById(R.id.address))
-                    .getText().toString().trim();
+        for (EditText view : addressViewsList) {
+            String addressString = view.getText().toString().trim();
             if (!addressString.isEmpty()) {
                 addressList.add(addressString);
             }
         }
-        contact.setAddresses(addressList);
+        if (contact == null) {
+            if (addressList.size() > 0) return true;
+        } else {
+            return !listsEqual(contact.getAddresses(), addressList);
+        }
 
-        return !listsEqual(contact.getAddresses(), addressList);
+        return false;
     }
 
     private boolean listsEqual(List<String> list1, List<String> list2) {
@@ -487,7 +557,8 @@ public class ContactEditActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mode == Mode.EDIT && isContactEdited()) {
+        if ((mode == null || mode == Mode.EDIT) && isContactEdited()) {
+            // If changes were made to the new or existing contact - show confirmation dialog
             dialog = new AlertDialog.Builder(this)
                     .setTitle(R.string.contacts_edit_discard_dialog_title)
                     .setPositiveButton(R.string.contacts_edit_discard_dialog_positive_button_title,
